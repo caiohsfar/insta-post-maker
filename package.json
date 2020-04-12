@@ -1,0 +1,26 @@
+{
+  "name": "insta-post-maker",
+  "version": "1.0.0",
+  "description": "A instagram post maker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caiohsfar/insta-post-maker.git"
+  },
+  "author": "Caio Farias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caiohsfar/insta-post-maker/issues"
+  },
+  "homepage": "https://github.com/caiohsfar/insta-post-maker#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "prettier": "^2.0.4"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
