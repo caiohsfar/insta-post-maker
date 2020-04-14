@@ -6,10 +6,19 @@ async function robot() {
   }
 
   content.searchTerm = askAndReturnSearchTerm()
-  
+
   content.subTopic = await askAndReturnSubtopic(content.searchTerm)
 
+  content.sourceText = await getTextFromWikipedia(
+    content.searchTerm,
+    content.subTopic
+  )
+
   console.dir(content, { depht: false })
+
+  async function getTextFromWikipedia(topic, subtopic) {
+    return await new Scrapper().getParagraph(topic, subtopic)
+  }
 
   function askAndReturnSearchTerm() {
     return readline.question('> [Input]: Digite um termo do Wikipedia: ')
