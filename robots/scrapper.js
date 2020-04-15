@@ -36,7 +36,7 @@ class Scrapper {
     try {
       await this.driver.get(this.WIKIPEDIA_URL + topic)
 
-      const spanId = subtopic.replace(/ /, '_')
+      const spanId = subtopic.replace(/ /g, '_')
       const xPath = `//*[@id='${spanId}']/../following-sibling::p`
 
       const paragraphElement = await this.getElementByXpath(xPath)
@@ -46,8 +46,6 @@ class Scrapper {
     } catch (e) {
       console.error('> [Erro]: ' + e)
       process.exit(1)
-    } finally {
-      await this.driver.quit()
     }
   }
 
@@ -78,9 +76,7 @@ class Scrapper {
     } catch (e) {
       console.error('> [Erro]: ' + e)
       process.exit(1)
-    } finally {
-      await this.driver.quit()
-    }
+    } 
   }
 }
 
