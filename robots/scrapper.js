@@ -32,8 +32,12 @@ class Scrapper {
     )
   }
 
-  async getParagraph(topic, subtopic) {
+  async getParagraphFromWikipedia(topic, subtopic) {
     try {
+      console.log(
+        `> [Scrapper]: Getting text for term "${topic}" and topic "${subtopic}" on Wikipedia...`
+      )
+      
       await this.driver.get(this.WIKIPEDIA_URL + topic)
 
       const spanId = subtopic.replace(/ /g, '_')
