@@ -21,7 +21,10 @@
     "prettier": "^2.0.4"
   },
   "dependencies": {
+    "ibm-watson": "^5.4.0",
     "readline-sync": "^1.4.10",
-    "selenium-webdriver": "^4.0.0-alpha.7"
+    "sbd": "^1.0.18",
+    "selenium-webdriver": "^4.0.0-alpha.7",
+    "stopword": "^1.0.0"
   }
 }
