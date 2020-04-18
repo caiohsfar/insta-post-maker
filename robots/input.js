@@ -3,9 +3,7 @@ const scrapper = new (require('./scrapper'))()
 const state = require('./state')
 
 async function robot() {
-  const content = {
-    maximunSentences: 7,
-  }
+  const content = {}
 
   content.searchTerm = askAndReturnSearchTerm()
 
@@ -15,7 +13,7 @@ async function robot() {
 
   state.save(content)
 
-  console.dir(content, { depht: false })
+  //console.dir(content, { depht: false })
 
   function askAndReturnSearchTerm() {
     return readline.question('> [Input]: Digite um termo do Wikipedia: ')
