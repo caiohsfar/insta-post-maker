@@ -21,6 +21,7 @@
     "prettier": "^2.0.4"
   },
   "dependencies": {
+    "googleapis": "^49.0.0",
     "ibm-watson": "^5.4.0",
     "readline-sync": "^1.4.10",
     "sbd": "^1.0.18",
