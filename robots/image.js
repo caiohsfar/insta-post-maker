@@ -9,10 +9,10 @@ async function robot() {
   const content = state.load()
   await getImagesForSentences(content)
 
-  askWhatImageToChoose(content)
+  await askWhatImageToChoose(content)
   state.save(content)
 
-  function askWhatImageToChoose(content) {
+  async function askWhatImageToChoose(content) {
     const images = content.sentences
       .filter((sentence) => {
         return sentence.images.length > 0
@@ -25,45 +25,56 @@ async function robot() {
       images,
       '> [Input]: Qual imagem você escolhe?'
     )
-
-    content.selectedImage = images[selectedImageIndex]
-    console.log('Selected image: ', images[selectedImageIndex])
+    const imageUrl = images[selectedImageIndex]
+    content.selectedImage = imageUrl
+    if (selectedImageIndex === -1) return process.exit(0)
+    console.log('Selected image index: ', selectedImageIndex)
   }
 
   async function getImagesForSentences(content) {
     const maxRelevanceIndex = 0
-
-    for (let index = 0; index < content.sentences.length; index++) {
-      const query = `${content.searchTerm} ${content.sentences[index].keywords[maxRelevanceIndex]}`
-      console.log('> [image]: Finding image links for query: ' + query)
-      try {
-        const images = await fetchGoogleAndReturnImagesLinks({
-          apiKey,
-          engineId,
-          query,
-        })
-        content.sentences[index].images = images
-      } catch (e) {
-        console.log('[Erro]: ' + e + ' continuing...')
-        continue
+    for (
+      let sentenceIndex = 0;
+      sentenceIndex < content.sentences.length;
+      sentenceIndex++
+    ) {
+      let query
+      if (sentenceIndex === 0) {
+        query = `${content.searchTerm}`
+      } else {
+        const keyword =
+          content.sentences[sentenceIndex].keywords[maxRelevanceIndex]
+        query = `${content.searchTerm} ${content.subTopic} ${keyword}`
       }
+
+      console.log('> [image]: Finding image links for query: ' + query)
+      const images = await fetchGoogleAndReturnImagesLinks({
+        apiKey,
+        engineId,
+        query,
+      })
+      content.sentences[sentenceIndex].images = images
     }
   }
 
   async function fetchGoogleAndReturnImagesLinks(options) {
-    const response = await customSearch.cse.list({
-      auth: options.apiKey,
-      cx: options.engineId,
-      q: options.query,
-      searchType: 'image',
-      num: 1,
-    })
+    try {
+      const response = await customSearch.cse.list({
+        auth: options.apiKey,
+        cx: options.engineId,
+        q: options.query,
+        imgSize: "huge",
+        searchType: 'image',
+        num: 1,
+      })
 
-    const imagesUrl = response.data.items.map((item) => {
-      return item.link
-    })
-
-    return imagesUrl
+      const imagesUrl = response.data.items.map((item) => {
+        return item.link
+      })
+      return imagesUrl
+    } catch (e) {
+      console.log(`[Erro]: ${e}. Continuing...`)
+    }
   }
 }
 
