@@ -27,12 +27,24 @@ async function robot() {
   content.sanitizedText = sanitizeText(content.sourceText)
 
   breakTextInSentences(content)
+  filterSentences(content)
   await fetchKeywordsOfAllSentences(content)
+
+  filterTags(content)
+
   state.save(content)
 
   console.dir(content, { depth: true })
 
   await scrapper.driver.quit()
+
+  function filterSentences(content) {
+    content.sentences = content.sentences.slice(0, content.maximunSentences)
+  }
+
+  function filterTags(content) {
+    content.tags = content.tags.slice(0, content.maximunTags)
+  }
 
   function getTagsByKeywords(keywords) {
     let tags = []
@@ -73,7 +85,9 @@ async function robot() {
 
       sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text)
 
-      tags = [...tags, ...getTagsByKeywords(sentence.keywords)]
+      tags = [...tags, ...getTagsByKeywords(sentence.keywords)].map((tag) =>
+        tag.toLowerCase().replace(/-/g, '')
+      )
 
       console.log(`> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`)
     }
