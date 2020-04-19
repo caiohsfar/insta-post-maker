@@ -3,7 +3,10 @@ const scrapper = new (require('./scrapper'))()
 const state = require('./state')
 
 async function robot() {
-  const content = {}
+  const content = {
+    maximunSentences: 4,
+    maximunTags: 30,
+  }
 
   content.searchTerm = askAndReturnSearchTerm()
 
