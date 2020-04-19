@@ -21,8 +21,11 @@
     "prettier": "^2.0.4"
   },
   "dependencies": {
+    "googleapis": "^49.0.0",
     "ibm-watson": "^5.4.0",
+    "instagram-private-api": "^1.39.2",
     "readline-sync": "^1.4.10",
+    "request-promise": "^4.2.5",
     "sbd": "^1.0.18",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "stopword": "^1.0.0"

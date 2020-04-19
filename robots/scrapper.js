@@ -33,11 +33,12 @@ class Scrapper {
   }
 
   async getParagraphFromWikipedia(topic, subtopic) {
+    if (topic === undefined || subtopic === undefined) return process.exit(0)
     try {
       console.log(
         `> [Scrapper]: Getting text for term "${topic}" and topic "${subtopic}" on Wikipedia...`
       )
-      
+
       await this.driver.get(this.WIKIPEDIA_URL + topic)
 
       const spanId = subtopic.replace(/ /g, '_')
@@ -60,11 +61,15 @@ class Scrapper {
     )
 
     try {
-      const url = this.WIKIPEDIA_URL + searchTerm
-      await this.driver.get(url)
+      // const url = this.WIKIPEDIA_URL + searchTerm
+      // await this.driver.get(url)
 
-      const linkLi = await this.getElementById('ca-viewsource')
-      await linkLi.findElement(By.tagName('a')).click()
+      // const linkLi = await this.getElementById('ca-viewsource')
+      // await linkLi.findElement(By.tagName('a')).click()
+
+      await this.driver.get(
+        `https://pt.wikipedia.org/w/index.php?title=${searchTerm}&action=edit`
+      )
 
       const sourceText = await this.driver
         .findElement(By.id('wpTextbox1'))
@@ -80,7 +85,7 @@ class Scrapper {
     } catch (e) {
       console.error('> [Erro]: ' + e)
       process.exit(1)
-    } 
+    }
   }
 }
 

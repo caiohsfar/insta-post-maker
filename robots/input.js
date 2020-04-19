@@ -4,7 +4,8 @@ const state = require('./state')
 
 async function robot() {
   const content = {
-    maximunSentences: 7,
+    maximunSentences: 4,
+    maximunTags: 30,
   }
 
   content.searchTerm = askAndReturnSearchTerm()
@@ -15,7 +16,7 @@ async function robot() {
 
   state.save(content)
 
-  console.dir(content, { depht: false })
+  //console.dir(content, { depht: false })
 
   function askAndReturnSearchTerm() {
     return readline.question('> [Input]: Digite um termo do Wikipedia: ')
