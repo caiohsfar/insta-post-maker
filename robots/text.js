@@ -1,7 +1,7 @@
 const state = require('./state')
 const stopword = require('stopword')
 
-const scrapper = new (require('./scrapper'))()
+const scrapper = require('./scrapper')()
 const sentenceBoundaryDetection = require('sbd')
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1')
 const { IamAuthenticator } = require('ibm-watson/auth')
@@ -36,7 +36,7 @@ async function robot() {
 
   console.dir(content, { depth: true })
 
-  await scrapper.driver.quit()
+  await scrapper.quitDriver()
 
   function filterSentences(content) {
     content.sentences = content.sentences.slice(0, content.maximunSentences)

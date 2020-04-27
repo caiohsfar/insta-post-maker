@@ -1,5 +1,3 @@
-const state = require('./robots/state')
-
 const robots = {
   input: require('./robots/input.js'),
   text: require('./robots/text.js'),

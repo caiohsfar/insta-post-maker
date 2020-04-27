@@ -1,5 +1,5 @@
 const readline = require('readline-sync')
-const scrapper = new (require('./scrapper'))()
+const scrapper = require('./scrapper')()
 const state = require('./state')
 
 async function robot() {
@@ -12,7 +12,7 @@ async function robot() {
 
   content.subTopic = await askAndReturnSubtopic(content.searchTerm)
 
-  await scrapper.driver.quit()
+  await scrapper.quitDriver()
 
   state.save(content)
 
