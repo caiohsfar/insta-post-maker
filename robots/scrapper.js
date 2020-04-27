@@ -2,49 +2,41 @@
 const chrome = require('selenium-webdriver/chrome')
 const { Builder, By, until } = require('selenium-webdriver')
 
-class Scrapper {
+function scrapper() {
   WAIT_TIMEOUT = 20000
   WIKIPEDIA_URL = 'https://pt.wikipedia.org/wiki/'
 
-  constructor() {
-    const serviceBuilder = new chrome.ServiceBuilder(
-      './webdriver/chromedriver.exe'
-    )
+  const serviceBuilder = new chrome.ServiceBuilder(
+    './webdriver/chromedriver.exe'
+  ).loggingTo("./webdriver/chromedriver.log")
 
-    this.driver = new Builder()
-      .forBrowser('chrome')
-      .setChromeOptions(new chrome.Options().headless())
-      .setChromeService(serviceBuilder)
-      .build()
-  }
 
-  async getElementById(id) {
-    return await this.driver.wait(
-      until.elementLocated(By.id(id)),
-      this.WAIT_TIMEOUT
-    )
-  }
+  const driver = new Builder()
+    .forBrowser('chrome')
+    .setChromeOptions(new chrome.Options().headless())
+    .setChromeService(serviceBuilder)
+    .build()
 
-  async getElementByXpath(xPath) {
-    return await this.driver.wait(
+  async function getElementByXpath(xPath) {
+    return await driver.wait(
       until.elementLocated(By.xpath(xPath)),
-      this.WAIT_TIMEOUT
+      WAIT_TIMEOUT
     )
   }
 
-  async getParagraphFromWikipedia(topic, subtopic) {
+  async function getParagraphFromWikipedia(topic, subtopic) {
     if (topic === undefined || subtopic === undefined) return process.exit(0)
     try {
       console.log(
         `> [Scrapper]: Getting text for term "${topic}" and topic "${subtopic}" on Wikipedia...`
       )
 
-      await this.driver.get(this.WIKIPEDIA_URL + topic)
+      await driver.get(WIKIPEDIA_URL + topic)
 
       const spanId = subtopic.replace(/ /g, '_')
       const xPath = `//*[@id='${spanId}']/../following-sibling::p`
 
-      const paragraphElement = await this.getElementByXpath(xPath)
+      const paragraphElement = await getElementByXpath(xPath)
       const sourceText = await paragraphElement.getText()
 
       return sourceText
@@ -54,24 +46,18 @@ class Scrapper {
     }
   }
 
-  async getSubtopicsFromWikipedia(searchTerm) {
+  async function getSubtopicsFromWikipedia(searchTerm) {
     // TODO: HANDLE ERRORS
     console.log(
       `> [Scrapper]: Getting subtopics for term "${searchTerm}" on Wikipedia...`
     )
 
     try {
-      // const url = this.WIKIPEDIA_URL + searchTerm
-      // await this.driver.get(url)
-
-      // const linkLi = await this.getElementById('ca-viewsource')
-      // await linkLi.findElement(By.tagName('a')).click()
-
-      await this.driver.get(
+      await driver.get(
         `https://pt.wikipedia.org/w/index.php?title=${searchTerm}&action=edit`
       )
 
-      const sourceText = await this.driver
+      const sourceText = await driver
         .findElement(By.id('wpTextbox1'))
         .getText()
 
@@ -87,6 +73,16 @@ class Scrapper {
       process.exit(1)
     }
   }
+
+  async function quitDriver() {
+    (await driver).quit()
+  }
+
+  return {
+    getSubtopicsFromWikipedia,
+    getParagraphFromWikipedia,
+    quitDriver
+  }
 }
 
-module.exports = Scrapper
+module.exports = scrapper
